@@ -1,23 +1,29 @@
-import logo from './logo.svg';
+import {  useState, useTransition } from 'react';
 import './App.css';
 
 function App() {
+  const [isPending,startTransition] = useTransition()
+  const [input,setInput] = useState("")
+  const [list,setList] = useState([])
+
+const LIST_SIZE = 20000
+  const handleChange = (e) => {
+    setInput(e.target.value)
+  startTransition(() => {
+    const l = []
+    for(let i = 0 ; i < LIST_SIZE ; i++){
+          l.push(e.target.value)
+    }
+    setList(l)
+  })
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+       <input type="text" value={input} onChange={handleChange} />
+       { isPending ? "Loading ..." :
+        list.map((item,index) => {
+        return <div key={index}>{item}</div>
+       })}
     </div>
   );
 }
